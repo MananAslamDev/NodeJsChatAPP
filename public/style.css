@@ -1,0 +1,84 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f0f2f5;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+#app {
+  width: 400px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.login-screen, .chat-screen {
+  padding: 20px;
+}
+
+.hidden {
+  display: none;
+}
+
+header {
+  background: #4a90e2;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+}
+
+#messages {
+  list-style: none;
+  padding: 10px;
+  height: 300px;
+  overflow-y: auto;
+  margin: 0;
+}
+
+#messages li {
+  margin: 8px 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  max-width: 80%;
+}
+
+#messages li.system {
+  background: #eee;
+  text-align: center;
+  font-style: italic;
+}
+
+#messages li.self {
+  background: #4a90e2;
+  color: white;
+  margin-left: auto;
+}
+
+#messages li.other {
+  background: #f1f1f1;
+  margin-right: auto;
+}
+
+.input-area {
+  display: flex;
+  border-top: 1px solid #ddd;
+}
+
+.input-area input {
+  flex: 1;
+  border: none;
+  padding: 10px;
+  font-size: 14px;
+}
+
+.input-area button {
+  border: none;
+  padding: 10px 15px;
+  background: #4a90e2;
+  color: #fff;
+  cursor: pointer;
+}
