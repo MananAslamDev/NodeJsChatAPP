@@ -1,58 +1,46 @@
-let ws;
-let username;
+// Connect with secure WebSocket if hosted on https, otherwise ws
+const protocol = location.protocol === "https:" ? "wss:" : "ws:";
+const ws = new WebSocket(`${protocol}//${location.host}`);
 
-document.getElementById('joinBtn').onclick = () => {
-  username = document.getElementById('username').value.trim();
-  if (!username) return;
+let username = null;
 
-  ws = new WebSocket(`ws://${location.host}`);
-  
-  ws.onopen = () => {
-    ws.send(JSON.stringify({ type: 'setName', name: username }));
-    document.getElementById('login').classList.add('hidden');
-    document.getElementById('chat').classList.remove('hidden');
-  };
+document.getElementById("joinBtn").onclick = () => {
+  const nameInput = document.getElementById("username");
+  const error = document.getElementById("error");
+  if (!nameInput.value.trim()) {
+    error.textContent = "Please enter a username.";
+    return;
+  }
+  username = nameInput.value.trim();
+  ws.send(JSON.stringify({ type: "setName", name: username }));
 
-  ws.onmessage = (e) => {
-    const data = JSON.parse(e.data);
-    const li = document.createElement('li');
-
-    if (data.system) {
-      li.classList.add('system');
-      li.textContent = data.message || data.error;
-      if (data.error) {
-        document.getElementById('error').textContent = data.error;
-        ws.close();
-        document.getElementById('login').classList.remove('hidden');
-        document.getElementById('chat').classList.add('hidden');
-      }
-    } else {
-      li.classList.add(data.from === username ? 'self' : 'other');
-      li.textContent = `${data.from}: ${data.message}`;
-    }
-
-    document.getElementById('messages').appendChild(li);
-    li.scrollIntoView();
-  };
-
-  ws.onclose = () => {
-    const li = document.createElement('li');
-    li.classList.add('system');
-    li.textContent = "Disconnected from server.";
-    document.getElementById('messages').appendChild(li);
-  };
+  // switch screens
+  document.getElementById("login").classList.add("hidden");
+  document.getElementById("chat").classList.remove("hidden");
 };
 
-document.getElementById('sendBtn').onclick = sendMessage;
-document.getElementById('msg').addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') sendMessage();
-});
+ws.onmessage = (event) => {
+  const msg = JSON.parse(event.data);
+  const messagesList = document.getElementById("messages");
 
-function sendMessage() {
-  const input = document.getElementById('msg');
-  const text = input.value.trim();
-  if (text && ws && ws.readyState === WebSocket.OPEN) {
-    ws.send(JSON.stringify({ type: 'chat', message: text }));
-    input.value = '';
+  let text;
+  if (msg.system) {
+    text = `[System] ${msg.message || msg.error}`;
+  } else {
+    text = `${msg.from}: ${msg.message}`;
   }
-}
+
+  const li = document.createElement("li");
+  li.textContent = text;
+  messagesList.appendChild(li);
+  messagesList.scrollTop = messagesList.scrollHeight;
+};
+
+document.getElementById("sendBtn").onclick = () => {
+  const input = document.getElementById("msg");
+  const message = input.value.trim();
+  if (message) {
+    ws.send(JSON.stringify({ type: "chat", message }));
+    input.value = "";
+  }
+};
