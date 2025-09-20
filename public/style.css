@@ -1,110 +1,198 @@
-/* style.css (new basic stylesheet for improved appeal) */
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #1a1a1a;
+  color: #e0e0e0;
   margin: 0;
   padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
 #app {
-  max-width: 600px;
-  margin: auto;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  max-width: 700px;
+  width: 100%;
+  background: #2a2a2a;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+#app:hover {
+  transform: translateY(-2px);
 }
 
 .login-screen {
-  padding: 20px;
+  padding: 30px;
   text-align: center;
+  background: #222222;
+}
+
+.login-screen h2 {
+  margin: 0 0 20px;
+  font-size: 1.8em;
+  color: #ffffff;
 }
 
 .login-screen input {
-  width: 80%;
-  padding: 10px;
+  width: calc(100% - 24px);
+  padding: 12px;
   margin: 10px 0;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 1px solid #444;
+  border-radius: 6px;
+  background: #333;
+  color: #e0e0e0;
+  font-size: 1em;
+  transition: border-color 0.3s ease;
+}
+
+.login-screen input:focus {
+  outline: none;
+  border-color: #00aaff;
+  box-shadow: 0 0 5px rgba(0, 170, 255, 0.5);
 }
 
 .login-screen button {
-  padding: 10px 20px;
-  background: #007bff;
-  color: white;
+  padding: 12px 30px;
+  background: #00aaff;
+  color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
+  font-size: 1em;
+  font-weight: 500;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .login-screen button:hover {
-  background: #0056b3;
+  background: #0088cc;
+  transform: translateY(-1px);
 }
 
 #error {
-  color: red;
+  color: #ff4d4d;
   margin-top: 10px;
+  font-size: 0.9em;
 }
 
 .chat-screen {
   display: flex;
   flex-direction: column;
   height: 80vh;
+  background: #252525;
 }
 
 header {
-  background: #007bff;
-  color: white;
-  padding: 10px;
+  background: #1f1f1f;
+  color: #ffffff;
+  padding: 15px;
   text-align: center;
+  border-bottom: 1px solid #333;
+}
+
+header h2 {
+  margin: 0;
+  font-size: 1.6em;
 }
 
 #messages {
   flex: 1;
   overflow-y: auto;
   list-style: none;
-  padding: 10px;
+  padding: 15px;
   margin: 0;
-  background: #fafafa;
+  background: #2a2a2a;
 }
 
 #messages li {
-  padding: 8px;
-  border-bottom: 1px solid #eee;
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  background: #333;
   word-wrap: break-word;
+  font-size: 0.95em;
+  transition: background 0.2s ease;
 }
 
 #messages li.system {
-  color: gray;
+  color: #888;
   font-style: italic;
+  background: #2c2c2c;
+  text-align: center;
+}
+
+#messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+#messages::-webkit-scrollbar-track {
+  background: #222;
+}
+
+#messages::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 4px;
+}
+
+#messages::-webkit-scrollbar-thumb:hover {
+  background: #777;
 }
 
 .input-area {
   display: flex;
-  padding: 10px;
-  border-top: 1px solid #ddd;
+  padding: 15px;
+  border-top: 1px solid #333;
+  background: #222;
 }
 
 #msg {
   flex: 1;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px 0 0 4px;
+  padding: 12px;
+  border: 1px solid #444;
+  border-radius: 6px 0 0 6px;
+  background: #333;
+  color: #e0e0e0;
+  font-size: 1em;
+}
+
+#msg:focus {
+  outline: none;
+  border-color: #00aaff;
+  box-shadow: 0 0 5px rgba(0, 170, 255, 0.3);
 }
 
 #sendBtn {
-  padding: 10px 20px;
-  background: #007bff;
-  color: white;
+  padding: 12px 25px;
+  background: #00aaff;
+  color: #fff;
   border: none;
-  border-radius: 0 4px 4px 0;
+  border-radius: 0 6px 6px 0;
   cursor: pointer;
+  font-size: 1em;
+  font-weight: 500;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 #sendBtn:hover {
-  background: #0056b3;
+  background: #0088cc;
+  transform: translateY(-1px);
 }
 
 .hidden {
   display: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  #app {
+    margin: 10px;
+  }
+  .login-screen {
+    padding: 20px;
+  }
+  .login-screen h2, header h2 {
+    font-size: 1.4em;
+  }
 }
