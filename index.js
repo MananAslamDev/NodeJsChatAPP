@@ -1,12 +1,12 @@
-// server.js
+// index.js (updated server-side Node.js)
 const WebSocket = require('ws');
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 
-// Simple HTTP server to serve frontend files
+// Simple HTTP server to serve frontend files from 'public' folder
 const server = http.createServer((req, res) => {
   let filePath = path.join(
     __dirname,
@@ -41,12 +41,13 @@ wss.on('connection', (ws) => {
 
     // Handle setting username
     if (data.type === 'setName') {
-      if (clients.has(data.name)) {
-        ws.send(JSON.stringify({ system: true, error: 'Username already taken!' }));
+      const name = data.name.trim();
+      if (!name || clients.has(name)) {
+        ws.send(JSON.stringify({ system: true, error: 'Username already taken or invalid!' }));
         ws.close();
         return;
       }
-      username = data.name;
+      username = name;
       clients.set(username, ws);
 
       broadcast({ system: true, message: `${username} joined the chat` });
@@ -54,8 +55,8 @@ wss.on('connection', (ws) => {
     }
 
     // Handle normal messages
-    if (data.type === 'chat' && username) {
-      broadcast({ from: username, message: data.message });
+    if (data.type === 'chat' && username && data.message.trim()) {
+      broadcast({ from: username, message: data.message.trim() });
     }
   });
 

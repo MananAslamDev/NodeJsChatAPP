@@ -1,46 +1,83 @@
-// Connect with secure WebSocket if hosted on https, otherwise ws
-const protocol = location.protocol === "https:" ? "wss:" : "ws:";
-const ws = new WebSocket(`${protocol}//${location.host}`);
+// script.js (updated client-side browser script)
+let ws;
+const messagesList = document.getElementById("messages");
+const nameInput = document.getElementById("username");
+const msgInput = document.getElementById("msg");
+const joinBtn = document.getElementById("joinBtn");
+const sendBtn = document.getElementById("sendBtn");
+const loginScreen = document.getElementById("login");
+const chatScreen = document.getElementById("chat");
+const errorP = document.getElementById("error");
 
-let username = null;
+let username;
 
-document.getElementById("joinBtn").onclick = () => {
-  const nameInput = document.getElementById("username");
-  const error = document.getElementById("error");
+joinBtn.onclick = () => {
   if (!nameInput.value.trim()) {
-    error.textContent = "Please enter a username.";
+    errorP.textContent = "Enter a username first!";
     return;
   }
+  errorP.textContent = "";
   username = nameInput.value.trim();
-  ws.send(JSON.stringify({ type: "setName", name: username }));
+  const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+  ws = new WebSocket(`${protocol}//${location.host}`);
 
-  // switch screens
-  document.getElementById("login").classList.add("hidden");
-  document.getElementById("chat").classList.remove("hidden");
+  ws.onopen = () => {
+    ws.send(JSON.stringify({ type: "setName", name: username }));
+    nameInput.disabled = true;
+    joinBtn.disabled = true;
+  };
+
+  ws.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    if (data.system && data.error) {
+      errorP.textContent = data.error;
+      nameInput.disabled = false;
+      joinBtn.disabled = false;
+      ws = null;
+      return;
+    }
+
+    const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    let text = data.system ? `[System] ${data.message}` : `${data.from}: ${data.message}`;
+    text = `${now} ${text}`;
+
+    const li = document.createElement("li");
+    li.textContent = text;
+    if (data.system) li.classList.add("system");
+    messagesList.appendChild(li);
+    messagesList.scrollTop = messagesList.scrollHeight;
+
+    if (!loginScreen.classList.contains("hidden") && data.system && data.message === `${username} joined the chat`) {
+      loginScreen.classList.add("hidden");
+      chatScreen.classList.remove("hidden");
+      msgInput.disabled = false;
+      sendBtn.disabled = false;
+    }
+  };
+
+  ws.onclose = () => {
+    if (!loginScreen.classList.contains("hidden")) {
+      errorP.textContent = "Connection closed. Please try again.";
+    } else {
+      const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const li = document.createElement("li");
+      li.textContent = `${now} [System] Disconnected from chat.`;
+      li.classList.add("system");
+      messagesList.appendChild(li);
+      messagesList.scrollTop = messagesList.scrollHeight;
+      msgInput.disabled = true;
+      sendBtn.disabled = true;
+    }
+  };
 };
 
-ws.onmessage = (event) => {
-  const msg = JSON.parse(event.data);
-  const messagesList = document.getElementById("messages");
-
-  let text;
-  if (msg.system) {
-    text = `[System] ${msg.message || msg.error}`;
-  } else {
-    text = `${msg.from}: ${msg.message}`;
+sendBtn.onclick = () => {
+  if (msgInput.value.trim() && ws && ws.readyState === WebSocket.OPEN) {
+    ws.send(JSON.stringify({ type: "chat", message: msgInput.value.trim() }));
+    msgInput.value = "";
   }
-
-  const li = document.createElement("li");
-  li.textContent = text;
-  messagesList.appendChild(li);
-  messagesList.scrollTop = messagesList.scrollHeight;
 };
 
-document.getElementById("sendBtn").onclick = () => {
-  const input = document.getElementById("msg");
-  const message = input.value.trim();
-  if (message) {
-    ws.send(JSON.stringify({ type: "chat", message }));
-    input.value = "";
-  }
-};
+msgInput.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") sendBtn.onclick();
+});

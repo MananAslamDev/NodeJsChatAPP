@@ -1,84 +1,110 @@
+/* style.css (new basic stylesheet for improved appeal) */
 body {
   font-family: Arial, sans-serif;
-  background: #f0f2f5;
+  background-color: #f4f4f4;
   margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-#app {
-  width: 400px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-  overflow: hidden;
-}
-
-.login-screen, .chat-screen {
   padding: 20px;
 }
 
-.hidden {
-  display: none;
+#app {
+  max-width: 600px;
+  margin: auto;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.login-screen {
+  padding: 20px;
+  text-align: center;
+}
+
+.login-screen input {
+  width: 80%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.login-screen button {
+  padding: 10px 20px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.login-screen button:hover {
+  background: #0056b3;
+}
+
+#error {
+  color: red;
+  margin-top: 10px;
+}
+
+.chat-screen {
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
 }
 
 header {
-  background: #4a90e2;
-  color: #fff;
+  background: #007bff;
+  color: white;
   padding: 10px;
   text-align: center;
 }
 
 #messages {
+  flex: 1;
+  overflow-y: auto;
   list-style: none;
   padding: 10px;
-  height: 300px;
-  overflow-y: auto;
   margin: 0;
+  background: #fafafa;
 }
 
 #messages li {
-  margin: 8px 0;
-  padding: 8px 12px;
-  border-radius: 8px;
-  max-width: 80%;
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+  word-wrap: break-word;
 }
 
 #messages li.system {
-  background: #eee;
-  text-align: center;
+  color: gray;
   font-style: italic;
-}
-
-#messages li.self {
-  background: #4a90e2;
-  color: white;
-  margin-left: auto;
-}
-
-#messages li.other {
-  background: #f1f1f1;
-  margin-right: auto;
 }
 
 .input-area {
   display: flex;
+  padding: 10px;
   border-top: 1px solid #ddd;
 }
 
-.input-area input {
+#msg {
   flex: 1;
-  border: none;
   padding: 10px;
-  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 4px 0 0 4px;
 }
 
-.input-area button {
+#sendBtn {
+  padding: 10px 20px;
+  background: #007bff;
+  color: white;
   border: none;
-  padding: 10px 15px;
-  background: #4a90e2;
-  color: #fff;
+  border-radius: 0 4px 4px 0;
   cursor: pointer;
+}
+
+#sendBtn:hover {
+  background: #0056b3;
+}
+
+.hidden {
+  display: none;
 }
