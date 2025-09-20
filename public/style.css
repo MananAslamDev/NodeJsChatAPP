@@ -1,72 +1,81 @@
+/* style.css - Updated for timestamps on the right */
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background-color: #1a1a1a;
   color: #e0e0e0;
   margin: 0;
-  padding: 20px;
+  padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 #app {
-  max-width: 700px;
   width: 100%;
-  background: #2a2a2a;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  max-width: 800px;
+  height: 100vh;
+  background: #252525;
+  border-radius: 0;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
-  transition: transform 0.3s ease;
-}
-
-#app:hover {
-  transform: translateY(-2px);
 }
 
 .login-screen {
-  padding: 30px;
-  text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
   background: #222222;
 }
 
 .login-screen h2 {
   margin: 0 0 20px;
-  font-size: 1.8em;
+  font-size: clamp(1.5rem, 5vw, 1.8rem);
   color: #ffffff;
+  font-weight: 600;
 }
 
 .login-screen input {
-  width: calc(100% - 24px);
-  padding: 12px;
+  width: 100%;
+  max-width: 400px;
+  padding: 14px;
   margin: 10px 0;
   border: 1px solid #444;
-  border-radius: 6px;
+  border-radius: 8px;
   background: #333;
   color: #e0e0e0;
-  font-size: 1em;
-  transition: border-color 0.3s ease;
+  font-size: clamp(0.95rem, 4vw, 1rem);
+  box-sizing: border-box;
 }
 
 .login-screen input:focus {
   outline: none;
   border-color: #00aaff;
-  box-shadow: 0 0 5px rgba(0, 170, 255, 0.5);
+  box-shadow: 0 0 6px rgba(0, 170, 255, 0.4);
 }
 
 .login-screen button {
-  padding: 12px 30px;
+  width: 100%;
+  max-width: 400px;
+  padding: 14px;
   background: #00aaff;
   color: #fff;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 1em;
+  font-size: clamp(0.95rem, 4vw, 1rem);
   font-weight: 500;
   transition: background 0.3s ease, transform 0.2s ease;
 }
 
-.login-screen button:hover {
+.login-screen button:hover,
+.login-screen button:active {
   background: #0088cc;
   transform: translateY(-1px);
 }
@@ -74,27 +83,33 @@ body {
 #error {
   color: #ff4d4d;
   margin-top: 10px;
-  font-size: 0.9em;
+  font-size: clamp(0.85rem, 3.5vw, 0.9rem);
+  text-align: center;
 }
 
 .chat-screen {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  height: 80vh;
+  height: 100vh;
   background: #252525;
 }
 
 header {
   background: #1f1f1f;
   color: #ffffff;
-  padding: 15px;
+  padding: 12px 15px;
   text-align: center;
   border-bottom: 1px solid #333;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 header h2 {
   margin: 0;
-  font-size: 1.6em;
+  font-size: clamp(1.2rem, 4.5vw, 1.4rem);
+  font-weight: 500;
 }
 
 #messages {
@@ -103,28 +118,51 @@ header h2 {
   list-style: none;
   padding: 15px;
   margin: 0;
-  background: #2a2a2a;
+  background: #252525;
 }
 
 #messages li {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   padding: 10px 15px;
-  border-radius: 6px;
-  margin-bottom: 8px;
-  background: #333;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  max-width: 80%;
+  font-size: clamp(0.9rem, 3.8vw, 0.95rem);
+  line-height: 1.4;
   word-wrap: break-word;
-  font-size: 0.95em;
-  transition: background 0.2s ease;
+  background: #333;
 }
 
 #messages li.system {
   color: #888;
   font-style: italic;
-  background: #2c2c2c;
+  background: transparent;
   text-align: center;
+  max-width: 100%;
+  font-size: clamp(0.85rem, 3.5vw, 0.9rem);
+  justify-content: center;
+}
+
+#messages li.system .message-time {
+  display: none;
+}
+
+.message-text {
+  flex: 1;
+  padding-right: 10px;
+}
+
+.message-time {
+  color: #888;
+  font-size: clamp(0.75rem, 3vw, 0.8rem);
+  white-space: nowrap;
+  align-self: flex-end;
 }
 
 #messages::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 #messages::-webkit-scrollbar-track {
@@ -133,7 +171,7 @@ header h2 {
 
 #messages::-webkit-scrollbar-thumb {
   background: #555;
-  border-radius: 4px;
+  border-radius: 3px;
 }
 
 #messages::-webkit-scrollbar-thumb:hover {
@@ -142,40 +180,45 @@ header h2 {
 
 .input-area {
   display: flex;
-  padding: 15px;
-  border-top: 1px solid #333;
+  padding: 10px;
   background: #222;
+  border-top: 1px solid #333;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
 }
 
 #msg {
   flex: 1;
   padding: 12px;
   border: 1px solid #444;
-  border-radius: 6px 0 0 6px;
+  border-radius: 20px;
   background: #333;
   color: #e0e0e0;
-  font-size: 1em;
+  font-size: clamp(0.95rem, 4vw, 1rem);
 }
 
 #msg:focus {
   outline: none;
   border-color: #00aaff;
-  box-shadow: 0 0 5px rgba(0, 170, 255, 0.3);
+  box-shadow: 0 0 6px rgba(0, 170, 255, 0.3);
 }
 
 #sendBtn {
-  padding: 12px 25px;
+  padding: 12px 20px;
   background: #00aaff;
   color: #fff;
   border: none;
-  border-radius: 0 6px 6px 0;
+  border-radius: 20px;
   cursor: pointer;
-  font-size: 1em;
+  font-size: clamp(0.95rem, 4vw, 1rem);
   font-weight: 500;
+  margin-left: 8px;
   transition: background 0.3s ease, transform 0.2s ease;
 }
 
-#sendBtn:hover {
+#sendBtn:hover,
+#sendBtn:active {
   background: #0088cc;
   transform: translateY(-1px);
 }
@@ -184,15 +227,66 @@ header h2 {
   display: none;
 }
 
-/* Responsive adjustments */
+/* Mobile-specific adjustments */
 @media (max-width: 600px) {
+  body {
+    padding: 0;
+  }
+
   #app {
-    margin: 10px;
+    height: 100vh;
+    border-radius: 0;
   }
+
   .login-screen {
-    padding: 20px;
+    padding: 15px;
   }
-  .login-screen h2, header h2 {
-    font-size: 1.4em;
+
+  .login-screen input,
+  .login-screen button {
+    max-width: 100%;
+    padding: 12px;
+    font-size: clamp(0.9rem, 4.5vw, 1rem);
+  }
+
+  header {
+    padding: 10px;
+  }
+
+  #messages {
+    padding: 10px;
+  }
+
+  #messages li {
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    max-width: 85%;
+  }
+
+  .message-time {
+    font-size: clamp(0.7rem, 2.8vw, 0.75rem);
+  }
+
+  .input-area {
+    padding: 8px;
+  }
+
+  #msg {
+    padding: 10px;
+    border-radius: 20px;
+  }
+
+  #sendBtn {
+    padding: 10px 15px;
+    border-radius: 20px;
+  }
+}
+
+/* Ensure touch devices have proper tap feedback */
+@media (hover: none) {
+  .login-screen button:active,
+  #sendBtn:active {
+    background: #006699;
+    transform: scale(0.98);
   }
 }

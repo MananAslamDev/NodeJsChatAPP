@@ -1,4 +1,3 @@
-// script.js (updated client-side browser script)
 let ws;
 const messagesList = document.getElementById("messages");
 const nameInput = document.getElementById("username");
@@ -39,10 +38,19 @@ joinBtn.onclick = () => {
 
     const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     let text = data.system ? `[System] ${data.message}` : `${data.from}: ${data.message}`;
-    text = `${now} ${text}`;
-
+    
     const li = document.createElement("li");
-    li.textContent = text;
+    const messageSpan = document.createElement("span");
+    messageSpan.classList.add("message-text");
+    messageSpan.textContent = data.system ? data.message : `${data.from}: ${data.message}`;
+    
+    const timeSpan = document.createElement("span");
+    timeSpan.classList.add("message-time");
+    timeSpan.textContent = now;
+    
+    li.appendChild(messageSpan);
+    li.appendChild(timeSpan);
+    
     if (data.system) li.classList.add("system");
     messagesList.appendChild(li);
     messagesList.scrollTop = messagesList.scrollHeight;
@@ -61,7 +69,14 @@ joinBtn.onclick = () => {
     } else {
       const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const li = document.createElement("li");
-      li.textContent = `${now} [System] Disconnected from chat.`;
+      const messageSpan = document.createElement("span");
+      messageSpan.classList.add("message-text");
+      messageSpan.textContent = "[System] Disconnected from chat.";
+      const timeSpan = document.createElement("span");
+      timeSpan.classList.add("message-time");
+      timeSpan.textContent = now;
+      li.appendChild(messageSpan);
+      li.appendChild(timeSpan);
       li.classList.add("system");
       messagesList.appendChild(li);
       messagesList.scrollTop = messagesList.scrollHeight;
